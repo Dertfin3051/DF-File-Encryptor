@@ -61,7 +61,7 @@ public class InitCheck {
         if (password.length() > 32) throw new IOException();
 
         while (password.length() % 16 != 0) {
-            password = password.concat(" ");
+            password = password.concat("0");
         } // Password length must be a multiple of 16 (16 or 32)
 
         return new SecretKeySpec(password.getBytes(StandardCharsets.UTF_8), "AES");

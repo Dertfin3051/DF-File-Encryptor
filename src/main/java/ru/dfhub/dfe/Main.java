@@ -1,5 +1,7 @@
 package ru.dfhub.dfe;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,6 +50,24 @@ public class Main {
             return;
         } // If key length >32
 
-
+        switch (action) {
+            case ENCRYPT -> {
+                try {
+                    EncryptDecrypt.encrypt(fileName, key);
+                    System.out.println("Success!");
+                }
+                catch (Exception e) {
+                    System.out.println("An unknown error has occurred!");
+                }
+            }
+            case DECRYPT -> {
+                try {
+                    EncryptDecrypt.decrypt(fileName, key);
+                }
+                catch (IllegalBlockSizeException | BadPaddingException e) {
+                    System.out.println("Your encryption key is incorrect or the file has been damaged!");
+                }
+            }
+        }
     }
 }

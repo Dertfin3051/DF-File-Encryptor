@@ -36,4 +36,8 @@ public class FileUtils {
     public static String getEncodedFileName(String filePath) {
         return filePath.concat(".dfe");
     }
+
+    public static String getDecodedFileName(String filePath) {
+        return filePath.replace(".dfe", "");
+    }
 }
