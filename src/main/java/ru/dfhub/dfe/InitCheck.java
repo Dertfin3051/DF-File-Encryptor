@@ -7,10 +7,18 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+/**
+ * A class that contains methods for requesting and checking the validity of user input data
+ */
 public class InitCheck {
 
     private static final Scanner input = new Scanner(System.in);
 
+    /**
+     * Get action: encrypt/decrypt
+     * @return Action
+     * @throws IOException Wrong input
+     */
     public static Main.Action getAction() throws IOException {
         System.out.println("""
                 What do you want to do?
@@ -32,6 +40,13 @@ public class InitCheck {
         }
     }
 
+    /**
+     * File name (normal or encrypted)
+     * @param action Action (to check for file format)
+     * @return File name
+     * @throws IOException The encrypted file is in a format other than .dfe
+     * @throws FileNotFoundException File not found
+     */
     public static String getFileName(Main.Action action) throws IOException, FileNotFoundException {
         if (action == Main.Action.ENCRYPT) {
             System.out.print("File path: ");
@@ -53,6 +68,11 @@ public class InitCheck {
         return fileName;
     }
 
+    /**
+     * Get encryption key from user's password
+     * @return Encryption key
+     * @throws IOException Key length >32
+     */
     public static SecretKeySpec getEncryptionKey() throws IOException {
         System.out.print("Password: ");
 

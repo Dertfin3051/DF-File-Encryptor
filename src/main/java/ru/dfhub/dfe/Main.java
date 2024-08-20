@@ -7,6 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Main class.
+ * The main() method requests all required input data and starts the encryption/decryption process
+ */
 public class Main {
 
     public enum Action {

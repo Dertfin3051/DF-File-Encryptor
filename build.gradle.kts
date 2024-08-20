@@ -12,6 +12,6 @@ repositories {
 
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "ru.dfhub.dfe"
+        attributes["Main-Class"] = "ru.dfhub.dfe.Main"
     }
 }
