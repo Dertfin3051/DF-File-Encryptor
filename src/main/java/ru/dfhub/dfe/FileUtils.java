@@ -12,19 +12,23 @@ public class FileUtils {
      * @param filePath File path (absolute or relative)
      * @return File content
      */
-    public static String readFile(String filePath) {
-        StringBuilder fileContent = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                fileContent.append(line);
+    public static byte[] readFile(String filePath) {
+        byte[] fileBytes = new byte[0];
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(filePath))) {
+            int fileSize = in.available();
+            fileBytes = new byte[fileSize];
+            int bytesRead = in.read(fileBytes);
+
+            if (bytesRead != fileSize) {
+                throw new IOException();
             }
+
         }
         catch (IOException e) {
             System.out.printf("An error occurred while reading the file (%s): %s", e, e.getMessage());
         }
 
-        return fileContent.toString();
+        return fileBytes;
     }
 
     /**
@@ -32,14 +36,14 @@ public class FileUtils {
      * @param filePath File path (absolute or relative)
      * @param content Content to write
      */
-    public static void writeToNewFile (String filePath, String content) {
+    public static void writeToNewFile (String filePath, byte[] content) {
         File file = new File(filePath);
 
         try {
             if (!file.exists()) file.createNewFile();
-            FileWriter writer = new FileWriter(file);
-            writer.write(content);
-            writer.close();
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(filePath));
+            out.write(content);
+            out.close();
         }
         catch (IOException e) {
             System.out.printf("An error occurred while writing the file (%s): %s", e, e.getMessage());
