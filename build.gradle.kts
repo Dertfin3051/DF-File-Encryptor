@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "ru.dfhub"
+group = "ru.dfhub.dfe"
 version = "1.0-SNAPSHOT"
 
 repositories {
