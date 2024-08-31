@@ -78,7 +78,7 @@ public class InitCheck {
 
         String password = input.nextLine();
 
-        if (password.length() > 32) throw new IOException();
+        if (password.length() > 64) throw new IOException();
 
         while (password.length() % 16 != 0) {
             password = password.concat("0");

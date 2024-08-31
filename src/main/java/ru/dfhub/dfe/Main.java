@@ -50,9 +50,9 @@ public class Main {
             key = InitCheck.getEncryptionKey();
         }
         catch (IOException e) {
-            System.out.println("Password length must be less than 32 characters");
+            System.out.println("Password length must be less than 64 characters");
             return;
-        } // If key length >32
+        } // If key length >64
 
         switch (action) {
             case ENCRYPT -> {
