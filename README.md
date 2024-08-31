@@ -13,7 +13,7 @@ Next, install the `jar` file with the program in the releases section.
 Go to the folder with the program, open a console (terminal) in this folder and enter the command:
 
 ```bash
-java -jar dfe-1.0.jar
+java -jar dfe-1.1.jar
 ```
 
 The program has started!
