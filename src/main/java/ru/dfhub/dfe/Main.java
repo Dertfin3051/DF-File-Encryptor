@@ -1,77 +1,87 @@
 package ru.dfhub.dfe;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Scanner;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-/**
- * Main class.
- * The main() method requests all required input data and starts the encryption/decryption process
- */
-public class Main {
+import java.io.File;
+
+public class Main extends Application {
 
     public enum Action {
         ENCRYPT, DECRYPT
     }
 
-    private static final Scanner input = new Scanner(System.in);
+    private static Action action;
+    private static File file;
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        VBox mainPane = new VBox();
+        Text title = new Text("Welcome to DFE!");
+        HBox fileChooseBox = new HBox();
+        TextField fileName = new TextField("");
+        TextField password = new TextField("Password");
+        Button fileChooseButton = new Button("Choose file");
+        Button actionButton = new Button("File not specified!");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All files", "*"),
+                new FileChooser.ExtensionFilter("DFE encoded file", "*.dfe")
+        );
+
+        title.getStyleClass().addAll("title", "custom-font");
+        HBox.setMargin(title, new Insets(0, 0, 5, 0));
+
+        fileName.setPrefSize(230, 20);
+        fileName.setEditable(false);
+        HBox.setMargin(fileName, new Insets(0, 5, 0, 0));
+
+        fileChooseBox.getChildren().addAll(fileName, fileChooseButton);
+        VBox.setMargin(fileChooseBox, new Insets(0, 0, 5, 0));
+
+        fileChooseButton.setOnAction(e -> {
+            file = fileChooser.showOpenDialog(stage);
+            fileName.setText(file.getName());
+
+            if (file.getName().endsWith(".dfe")) {
+                actionButton.setText("Decrypt");
+                action = Action.DECRYPT;
+            } else {
+                actionButton.setText("Encrypt");
+                action = Action.ENCRYPT;
+            }
+        });
+
+        password.setMaxSize(320, 20);
+        VBox.setMargin(password, new Insets(0, 0, 5, 0));
+
+        actionButton.setOnAction(e -> {
+
+        });
+
+        mainPane.setPadding(new Insets(10));
+
+        mainPane.getChildren().addAll(title, fileChooseBox, password, actionButton);
+
+        Scene scene = new Scene(mainPane, 500, 300);
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
+        stage.setScene(scene);
+        stage.setTitle("DF File Encryptor");
+        stage.setResizable(false);
+        stage.show();
+    }
 
     public static void main(String[] args) {
-        Action action;
-        String fileName;
-        SecretKeySpec key;
-
-        System.out.println("Welcome to DFE!");
-
-        try {
-            action = InitCheck.getAction();
-        }
-        catch (IOException e) {
-            System.out.println("You entered an incorrect action!");
-            return;
-        } // Wrong action
-
-        try {
-            fileName = InitCheck.getFileName(action);
-        }
-        catch (FileNotFoundException e) {
-            System.out.println("The specified file does not exist!");
-            return;
-        } // File not exists
-        catch (IOException e) {
-            System.out.println("The specified file is not in .dfe format!");
-            return;
-        } // File to decrypt is not .dfe
-
-        try {
-            key = InitCheck.getEncryptionKey();
-        }
-        catch (IOException e) {
-            System.out.println("Password length must be less than 64 characters");
-            return;
-        } // If key length >64
-
-        switch (action) {
-            case ENCRYPT -> {
-                try {
-                    EncryptDecrypt.encrypt(fileName, key);
-                    System.out.println("Success!");
-                }
-                catch (Exception e) {
-                    System.out.println("An unknown error has occurred!");
-                }
-            }
-            case DECRYPT -> {
-                try {
-                    EncryptDecrypt.decrypt(fileName, key);
-                }
-                catch (IllegalBlockSizeException | BadPaddingException e) {
-                    System.out.println("Your encryption key is incorrect or the file has been damaged!");
-                }
-            }
-        }
+        launch();
     }
 }
