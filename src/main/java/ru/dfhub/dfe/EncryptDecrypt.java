@@ -4,6 +4,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
@@ -61,6 +63,18 @@ public class EncryptDecrypt {
                 FileUtils.getDecodedFileName(filePath),
                 encryptedContent
         );
+    }
+
+    /**
+     * Get encryption key from user's password
+     * @return Encryption key
+     */
+    public static SecretKeySpec getEncryptionKey(String password) {
+        while (password.length() % 16 != 0) {
+            password = password.concat("0");
+        }
+
+        return new SecretKeySpec(password.getBytes(StandardCharsets.UTF_8), "AES");
     }
 
 }
